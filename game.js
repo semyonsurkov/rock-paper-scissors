@@ -49,9 +49,9 @@ const game = () => {
     );
   }
 
-  if (userRoundWins > computerRoundWins) {
+  if (userRoundWins > computerRoundWins || userRoundWins === 3) {
     console.log('You won the game!');
-  } else if (computerRoundWins > userRoundWins) {
+  } else if (computerRoundWins > userRoundWins || computerRoundWins === 3) {
     console.log('The computer won the game!');
   } else {
     console.log('The game is a tie!');
