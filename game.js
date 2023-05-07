@@ -13,24 +13,6 @@ const initialMessage = MESSAGES.start;
 
 const bgMusic = document.getElementById('bg-music');
 const muteBtn = document.querySelector('.mute-btn');
-const userWinSound = new Audio('./sound/win-sound.mp3');
-const computerWinSound = new Audio('./sound/lose-sound.mp3');
-
-muteBtn.addEventListener('click', () => {
-  const audios = document.querySelectorAll('audio');
-  audios.forEach((audio) => {
-    if (!audio.muted) {
-      audio.muted = true;
-      audio.classList.add('muted');
-    } else {
-      audio.muted = false;
-      audio.classList.remove('muted');
-    }
-  });
-  bgMusic.currentTime = 0;
-  muteBtn.classList.toggle('muted');
-  muteBtn.textContent = audios[0].muted ? 'Unmute' : 'Mute';
-});
 
 const getComputerChoice = () => {
   const randomNumber = Math.floor(Math.random() * CHOICES.length);
@@ -67,20 +49,8 @@ const updateScore = () => {
 
   if (userScore >= 5) {
     endGame(MESSAGES.userWin);
-    bgMusic.pause();
-    if (!userWinSound.muted && !computerWinSound.muted) {
-      if (!muteBtn.classList.contains('muted')) {
-        userWinSound.play();
-      }
-    }
   } else if (computerScore >= 5) {
     endGame(MESSAGES.computerWin);
-    bgMusic.pause();
-    if (!userWinSound.muted && !computerWinSound.muted) {
-      if (!muteBtn.classList.contains('muted')) {
-        computerWinSound.play();
-      }
-    }
   }
 };
 
@@ -113,12 +83,7 @@ const resetScore = () => {
   buttons.forEach((button) => {
     button.disabled = false;
   });
-  userWinSound.pause();
-  computerWinSound.pause();
   updateScore();
-  bgMusic.currentTime = 0;
-  userWinSound.currentTime = 0;
-  computerWinSound.currentTime = 0;
 };
 
 const game = () => {
