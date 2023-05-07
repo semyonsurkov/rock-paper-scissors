@@ -1,27 +1,25 @@
 const CHOICES = ['rock', 'paper', 'scissors'];
-let userRoundWins = 0;
-let computerRoundWins = 0;
+let userScore = 0;
+let computerScore = 0;
+let userChoice = '';
+let computerChoice = '';
 const MESSAGES = {
   tie: 'The game is a tie!',
   computerWin: 'The computer won!',
   userWin: 'You won!',
-  invalidChoice: 'Please enter a valid choice!',
+  start: "Let's start the game!",
 };
+const initialMessage = MESSAGES.start;
 
 const getComputerChoice = () => {
   const randomNumber = Math.floor(Math.random() * CHOICES.length);
   return CHOICES[randomNumber];
 };
 
-const getUserChoice = () => {
-  let userChoice;
-  while (!CHOICES.includes(userChoice)) {
-    userChoice = prompt('Rock, Paper or Scissors?');
-    if (!CHOICES.includes(userChoice)) {
-      alert(MESSAGES.invalidChoice);
-    }
+const getUserChoice = (choice) => {
+  if (CHOICES.includes(choice)) {
+    return choice.toLowerCase();
   }
-  return userChoice.toLowerCase();
 };
 
 const determineWinner = (userChoice, computerChoice) => {
@@ -33,29 +31,83 @@ const determineWinner = (userChoice, computerChoice) => {
     (userChoice === 'paper' && computerChoice === 'scissors') ||
     (userChoice === 'scissors' && computerChoice === 'rock')
   ) {
-    computerRoundWins += 1;
+    computerScore += 1;
     return MESSAGES.computerWin;
   }
-  userRoundWins += 1;
+  userScore += 1;
   return MESSAGES.userWin;
 };
 
-const game = () => {
-  for (let roundCount = 0; roundCount < 5; roundCount++) {
-    const userChoice = getUserChoice();
-    const computerChoice = getComputerChoice();
-    console.log(
-      `Round ${roundCount + 1}: ${determineWinner(userChoice, computerChoice)}`
-    );
-  }
+const updateScore = () => {
+  const userScoreElement = document.querySelector('.user__score');
+  const computerScoreElement = document.querySelector('.computer__score');
+  userScoreElement.textContent = `Your Score: ${userScore}`;
+  computerScoreElement.textContent = `Computer Score: ${computerScore}`;
 
-  if (userRoundWins > computerRoundWins || userRoundWins === 3) {
-    console.log('You won the game!');
-  } else if (computerRoundWins > userRoundWins || computerRoundWins === 3) {
-    console.log('The computer won the game!');
-  } else {
-    console.log('The game is a tie!');
+  if (userScore >= 5) {
+    endGame(MESSAGES.userWin);
+  } else if (computerScore >= 5) {
+    endGame(MESSAGES.computerWin);
   }
+};
+
+const endGame = (message) => {
+  const infoElement = document.querySelector('.info');
+  const showUserChoice = document.querySelector('.user__choice');
+  const showComputerChoice = document.querySelector('.computer__choice');
+  infoElement.textContent = message;
+  showUserChoice.textContent = '';
+  showComputerChoice.textContent = '';
+
+  const buttons = document.querySelectorAll('.buttons button');
+  buttons.forEach((button) => {
+    button.disabled = true;
+  });
+};
+
+const resetScore = () => {
+  userScore = 0;
+  computerScore = 0;
+  userChoice = '';
+  computerChoice = '';
+  const infoElement = document.querySelector('.info');
+  const showUserChoice = document.querySelector('.user__choice');
+  const showComputerChoice = document.querySelector('.computer__choice');
+  infoElement.textContent = initialMessage;
+  showUserChoice.textContent = '';
+  showComputerChoice.textContent = '';
+  const buttons = document.querySelectorAll('.buttons button');
+  buttons.forEach((button) => {
+    button.disabled = false;
+  });
+  updateScore();
+};
+
+const game = () => {
+  resetScore();
+
+  const buttons = document.querySelectorAll('.buttons button');
+  const resetButton = document.querySelector('.reset');
+
+  resetButton.addEventListener('click', resetScore);
+
+  buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+      userChoice = getUserChoice(button.value);
+      computerChoice = getComputerChoice();
+      const roundResult = determineWinner(userChoice, computerChoice);
+      const infoElement = document.querySelector('.info');
+      const showUserChoice = document.querySelector('.user__choice');
+      const showComputerChoice = document.querySelector('.computer__choice');
+
+      infoElement.textContent =
+        roundResult !== initialMessage ? roundResult : initialMessage;
+      showUserChoice.textContent = `Your chose: ${userChoice}`;
+      showComputerChoice.textContent = `Computer chose: ${computerChoice}`;
+
+      updateScore();
+    });
+  });
 };
 
 game();

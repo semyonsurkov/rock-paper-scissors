@@ -8,8 +8,31 @@
     <title>Rock Paper Scissors</title>
   </head>
   <body>
+    <header class="header">Rock Paper Scissors</header>
     <div class="app">
-      <h1>Rock Paper Scissors</h1>
+      <div class="app__game">
+        <div class="info">
+          <p class="info__text"></p>
+        </div>
+        <div class="choice">
+          <div class="user__choice"></div>
+          <div class="computer__choice"></div>
+        </div>
+        <div class="score">
+          <div class="user__score"></div>
+          <div class="computer__score"></div>
+        </div>
+        <div class="buttons">
+          <button class="rock button" value="rock">Rock</button>
+          <button class="paper button" value="paper">Paper</button>
+          <button class="scissors button" value="scissors">Scissors</button>
+        </div>
+        <button class="reset button">Reset</button>
+      </div>
+    </div>
+    <footer class="footer">
+      <p>create by <a href="https://github.com/semyonsurkov" class="footer__link">semyonsurkov</a></p>
+    </footer>
     <script src="script.js"></script>
     <script src="game.js"></script>
   </body>
